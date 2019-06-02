@@ -7,12 +7,18 @@ const getStations = async (request, h) => {
         cmd: 'stns'
     }
 
-    if (request.params.stationId) {
-        obj.orig = request.params.stationId
+    const response = await bart.callBARTAPI(obj)
+    const r = {
+        stations: response.stations.station
     }
 
-    const response = await bart.callBARTAPI(obj)
-    return response
+    // Filter response for individual station if requested.
+    if (request.params.stationId) {
+        const compareId = request.params.stationId.toUpperCase()
+        r.stations = r.stations.filter(station => station.abbr === compareId)
+    }
+
+    return r
 }
 
 const getStationAccess = (request, h) =>  {
