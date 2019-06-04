@@ -21,19 +21,63 @@ const getStations = async (request, h) => {
     return r
 }
 
-const getStationAccess = (request, h) =>  {
+const getStationAccess = async (request, h) =>  {
+    const obj = {
+        section: 'stn',
+        cmd: 'stnaccess'
+    }
+
+   
     if (request.params.stationId) {
-        return `stationAccess: ${request.params.stationId}`
+        obj.orig = request.params.stationId
+
+        const response = await bart.callBARTAPI(obj)
+
+        const r = {
+            stationAccess: []
+        }
+
+        if (response && response.stations && response.stations.station) {
+            response.stations.station.parking_flag = response.stations.station['@parking_flag']
+            response.stations.station.bike_flag = response.stations.station['@bike_flag']
+            response.stations.station.bike_station_flag = response.stations.station['@bike_station_flag']
+            response.stations.station.locker_flag = response.stations.station['@locker_flag']
+            delete response.stations.station['@parking_flag']
+            delete response.stations.station['@bike_flag']
+            delete response.stations.station['@bike_station_flag']
+            delete response.stations.station['@locker_flag']
+
+            r.stationAccess.push(response.stations.station)
+        }
+        return r
     } else {
-        return 'stationAccess'
+        return 'TODO: All stations access details...'
     }
 }
 
-const getStationInfo = (request, h) => {
+const getStationInfo = async (request, h) => {
+    const obj = {
+        section: 'stn',
+        cmd: 'stninfo'
+    }
+
     if (request.params.stationId) {
-        return `stationInfo: ${request.params.stationId}`
+        obj.orig = request.params.stationId
+
+        const response = await bart.callBARTAPI(obj)
+
+        // TODO tidy up returned format...
+        const r = {
+            stationInfo: []
+        }
+
+        if (response && response.stations && response.stations.station) {
+            r.stationInfo.push(response.stations.station)
+        }
+
+        return r
     } else {
-        return 'stationInfo'
+        return 'TODO: All stations info details...'
     }
 }
 
@@ -97,7 +141,7 @@ module.exports = [
     },
     { 
         method: 'GET', 
-        path: '/stationAccess', 
+        path: '/stationaccess', 
         handler: getStationAccess, 
         options: { 
             tags: [ 
@@ -110,7 +154,7 @@ module.exports = [
     },
     { 
         method: 'GET', 
-        path: '/stationAccess/{stationId}', 
+        path: '/stationaccess/{stationId}', 
         handler: getStationAccess, 
         options: { 
             tags: [ 
@@ -128,7 +172,7 @@ module.exports = [
     },
     { 
         method: 'GET', 
-        path: '/stationInfo', 
+        path: '/stationinfo', 
         handler: getStationInfo, 
         options: { 
             tags: [ 
@@ -140,8 +184,8 @@ module.exports = [
         }
     },
     { 
-        method: 'GET', 
-        path: '/stationInfo/{stationId}', 
+        method: 'GET',
+        path: '/stationinfo/{stationId}', 
         handler: getStationInfo, 
         options: { 
             tags: [ 

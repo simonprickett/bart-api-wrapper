@@ -20,12 +20,15 @@ const callBARTAPI = async params => {
 
         const respObj = response.data.root
 
-        delete respObj['@id']
-        delete respObj.uri
-        delete respObj.date
-        delete respObj.time
+        if (respObj) {
+            delete respObj['@id']
+            delete respObj.uri
+            delete respObj.date
+            delete respObj.time
+        }
 
         // TODO remove any #cdata-section trash...
+        // TOOD remap any @ names...
         return respObj
     } catch (error) {
         console.error(error)
