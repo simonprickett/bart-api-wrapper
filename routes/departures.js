@@ -1,11 +1,25 @@
 const Joi = require('@hapi/joi')
+const bart = require('../bart')
 
-const getDepartures = (request, h) => {
+const getDepartures = async (request, h) => {
+    let stationId = 'all'
+
     if (request.params.stationId) {
-         return `departures: ${request.params.stationId}`
-    } else {
-        return 'departures'
+         stationId = request.params.stationId
     }
+
+    const obj = {
+        section: 'etd',
+        cmd: 'etd',
+        orig: stationId
+    }
+
+    const response = await bart.callBARTAPI(obj)
+    const r = {
+        departures: response.station
+    }
+
+    return r
 }
 
 module.exports = [
@@ -22,6 +36,7 @@ module.exports = [
             notes: 'TODO' 
         } 
     },
+    // TODO consider direction and platform... http://api.bart.gov/docs/etd/etd.aspx
     { 
         method: 'GET', 
         path: '/departures/{stationId}', 
