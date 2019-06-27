@@ -1,4 +1,5 @@
 const Joi = require('@hapi/joi')
+const bart = require('../bart')
 
 const getTickets = (request, h) => {
     return `tickets: ${request.params.fromStationId} to ${request.params.toStationId}`
