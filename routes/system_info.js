@@ -8,6 +8,12 @@ const getTrainCount = async (request, h) => {
 
     delete response.message
 
+    try {
+        if (response.traincount) {
+            response.traincount = parseInt(response.traincount, 10)
+        }
+    } catch (e) {}
+
     return response
 }
 

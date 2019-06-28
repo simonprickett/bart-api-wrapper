@@ -18,6 +18,13 @@ const getStations = async (request, h) => {
         r.stations = r.stations.filter(station => station.abbr === compareId)
     }
 
+    for (const station of r.stations) {
+        station.latitude = parseFloat(station.gtfs_latitude, 10)
+        station.longitude = parseFloat(station.gtfs_longitude, 10)
+        delete station.gtfs_latitude
+        delete station.gtfs_longitude
+    }
+
     return r
 }
 
@@ -37,11 +44,13 @@ const getStationAccess = async (request, h) =>  {
             stationAccess: []
         }
 
+        // TODO better error checking...
+
         if (response && response.stations && response.stations.station) {
-            response.stations.station.parking_flag = response.stations.station['@parking_flag']
-            response.stations.station.bike_flag = response.stations.station['@bike_flag']
-            response.stations.station.bike_station_flag = response.stations.station['@bike_station_flag']
-            response.stations.station.locker_flag = response.stations.station['@locker_flag']
+            response.stations.station.parking_flag = response.stations.station['@parking_flag'] === '1' ? true : false
+            response.stations.station.bike_flag = response.stations.station['@bike_flag'] === '1' ? true : false
+            response.stations.station.bike_station_flag = response.stations.station['@bike_station_flag'] === '1' ? true : false
+            response.stations.station.locker_flag = response.stations.station['@locker_flag'] === '1' ? true : false
             delete response.stations.station['@parking_flag']
             delete response.stations.station['@bike_flag']
             delete response.stations.station['@bike_station_flag']
@@ -73,6 +82,16 @@ const getStationInfo = async (request, h) => {
 
         if (response && response.stations && response.stations.station) {
             r.stationInfo.push(response.stations.station)
+        }
+
+        for (const station of r.stationInfo) {
+            station.latitude = parseFloat(station.gtfs_latitude, 10)
+            station.longitude = parseFloat(station.gtfs_longitude, 10)
+            delete station.gtfs_latitude
+            delete station.gtfs_longitude
+
+            // TODO parseInt on north_platforms.platform array
+            // TODO parseInt on south_platforms.platform array
         }
 
         return r
