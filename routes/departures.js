@@ -16,24 +16,26 @@ const getDepartures = async (request, h) => {
 
     const response = await bart.callBARTAPI(obj)
 
-    // TODO error checking...
-
-    for (const stn of response.station) {
-        for (const destination of stn.etd) {
-            destination.limited = destination.limited === '0' ? false : true
-
-            for (const estimate of destination.estimate) {
-                estimate.minutes = estimate.minutes === 'Leaving' ? 0 : parseInt(estimate.minutes, 10)
-                estimate.length = parseInt(estimate.length, 10)
-                estimate.platform = parseInt(estimate.platform, 10)
-                estimate.bikeflag = estimate.bikeflag === '1' ? true : false
-                estimate.delay = parseInt(estimate.delay, 10)
-            }
-        }
-    }   
-
     const r = {
-        departures: response.station
+        departures: []
+    }
+
+    if (response && response.station) {
+        for (const stn of response.station) {
+            for (const destination of stn.etd) {
+                destination.limited = destination.limited === '0' ? false : true
+
+                for (const estimate of destination.estimate) {
+                    estimate.minutes = estimate.minutes === 'Leaving' ? 0 : parseInt(estimate.minutes, 10)
+                    estimate.length = parseInt(estimate.length, 10)
+                    estimate.platform = parseInt(estimate.platform, 10)
+                    estimate.bikeflag = estimate.bikeflag === '1' ? true : false
+                    estimate.delay = parseInt(estimate.delay, 10)
+                }
+            }
+
+            r.departures = stn
+        }   
     }
 
     return r

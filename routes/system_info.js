@@ -38,7 +38,7 @@ const getServiceAnnouncements = async (request, h) => {
 module.exports = [
     { 
         method: 'GET', 
-        path: '/traincount',  // TODO replace with number of trains...
+        path: '/traincount',
         handler: getTrainCount, 
         options: { 
             tags: [ 
