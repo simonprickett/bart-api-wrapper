@@ -23,7 +23,15 @@ const getElevatorStatus = async (request, h) => {
         cmd: 'elev'
     })
 
-    return response
+    const r = {
+        elevatorStatus: []
+    }
+
+    if (response && response.bsa) {
+        r.elevatorStatus = response.bsa
+    }
+
+    return r
 }
 
 const getServiceAnnouncements = async (request, h) => {

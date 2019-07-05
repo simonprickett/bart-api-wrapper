@@ -48,14 +48,10 @@ const getStationAccess = async (request, h) =>  {
 
         if (response && response.stations && response.stations.station) {
             // This could maybe be pushed into the bart/index.js file...
-            response.stations.station.parking_flag = response.stations.station['@parking_flag'] === '1' ? true : false
-            response.stations.station.bike_flag = response.stations.station['@bike_flag'] === '1' ? true : false
-            response.stations.station.bike_station_flag = response.stations.station['@bike_station_flag'] === '1' ? true : false
-            response.stations.station.locker_flag = response.stations.station['@locker_flag'] === '1' ? true : false
-            delete response.stations.station['@parking_flag']
-            delete response.stations.station['@bike_flag']
-            delete response.stations.station['@bike_station_flag']
-            delete response.stations.station['@locker_flag']
+            response.stations.station.parking_flag = response.stations.station['parking_flag'] === '1' ? true : false
+            response.stations.station.bike_flag = response.stations.station['bike_flag'] === '1' ? true : false
+            response.stations.station.bike_station_flag = response.stations.station['bike_station_flag'] === '1' ? true : false
+            response.stations.station.locker_flag = response.stations.station['locker_flag'] === '1' ? true : false
 
             r.stationAccess.push(response.stations.station)
         }
