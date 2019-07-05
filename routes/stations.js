@@ -47,6 +47,7 @@ const getStationAccess = async (request, h) =>  {
         // TODO better error checking...
 
         if (response && response.stations && response.stations.station) {
+            // This could maybe be pushed into the bart/index.js file...
             response.stations.station.parking_flag = response.stations.station['@parking_flag'] === '1' ? true : false
             response.stations.station.bike_flag = response.stations.station['@bike_flag'] === '1' ? true : false
             response.stations.station.bike_station_flag = response.stations.station['@bike_station_flag'] === '1' ? true : false

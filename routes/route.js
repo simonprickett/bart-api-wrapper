@@ -16,9 +16,14 @@ const getRoute = async (request, h) => {
     })
 
     // TODO error checking!
-    // TODO naming changes and deletes
-    // TODO delete fares part
-    r.route.push(response.schedule.request.trip[0])
+    if (response && response.schedule && response.schedule.request && response.schedule.request.trip) {
+        const trip = response.schedule.request.trip[0]
+
+        // TODO naming changes and deletes
+        delete trip.fares
+
+        r.route.push(response.schedule.request.trip[0])
+    }
 
     return r
 }
