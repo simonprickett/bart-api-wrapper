@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi')
 const bart = require('../bart')
 
-const getStations = async (stationId) => {
+const getStations = async stationId => {
     const obj = {
         section: 'stn',
         cmd: 'stns'
@@ -28,15 +28,15 @@ const getStations = async (stationId) => {
     return r
 }
 
-const getStationAccess = async (request, h) =>  {
+const getStationAccess = async stationId =>  {
     const obj = {
         section: 'stn',
         cmd: 'stnaccess'
     }
 
    
-    if (request.params.stationId) {
-        obj.orig = request.params.stationId
+    if (stationId) {
+        obj.orig = stationId
 
         const response = await bart.callBARTAPI(obj)
 
@@ -61,14 +61,14 @@ const getStationAccess = async (request, h) =>  {
     }
 }
 
-const getStationInfo = async (request, h) => {
+const getStationInfo = async stationId => {
     const obj = {
         section: 'stn',
         cmd: 'stninfo'
     }
 
-    if (request.params.stationId) {
-        obj.orig = request.params.stationId
+    if (stationId) {
+        obj.orig = stationId
 
         const response = await bart.callBARTAPI(obj)
 
@@ -97,8 +97,8 @@ const getStationInfo = async (request, h) => {
     }
 }
 
-const getNearbyStations = (request, h) => {
-    return `stations near ${request.params.latitude}, ${request.params.longitude}, ${request.query.limit}`
+const getNearbyStations = (lat, lng, limit) => {
+    return `stations near ${lat}, ${lng}, ${limit}`
 }
 
 module.exports = [
@@ -136,7 +136,7 @@ module.exports = [
     { 
         method: 'GET', 
         path: '/stations/{latitude}/{longitude}', 
-        handler: getNearbyStations, 
+        handler: async (request, h) => getNearbyStations(request.params.latitude, request.params.longitude, request.query.limit), 
         options: { 
             tags: [ 
                 'api', 
@@ -158,7 +158,7 @@ module.exports = [
     { 
         method: 'GET', 
         path: '/stationaccess', 
-        handler: getStationAccess, 
+        handler: async (request, h) => getStationAccess(), 
         options: { 
             tags: [ 
                 'api', 
@@ -171,7 +171,7 @@ module.exports = [
     { 
         method: 'GET', 
         path: '/stationaccess/{stationId}', 
-        handler: getStationAccess, 
+        handler: async (request, h) => getStationAccess(request.params.stationId), 
         options: { 
             tags: [ 
                 'api', 
@@ -189,7 +189,7 @@ module.exports = [
     { 
         method: 'GET', 
         path: '/stationinfo', 
-        handler: getStationInfo, 
+        handler: async (request, h) => getStationInfo(), 
         options: { 
             tags: [ 
                 'api', 
@@ -202,7 +202,7 @@ module.exports = [
     { 
         method: 'GET',
         path: '/stationinfo/{stationId}', 
-        handler: getStationInfo, 
+        handler: async (request, h) => getStationInfo(request.params.stationId), 
         options: { 
             tags: [ 
                 'api', 
