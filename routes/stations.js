@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi')
 const bart = require('../bart')
 
-const getStations = async (request, h) => {
+const getStations = async (stationId) => {
     const obj = {
         section: 'stn',
         cmd: 'stns'
@@ -13,8 +13,8 @@ const getStations = async (request, h) => {
     }
 
     // Filter response for individual station if requested.
-    if (request.params.stationId) {
-        const compareId = request.params.stationId.toUpperCase()
+    if (stationId) {
+        const compareId = stationId.toUpperCase()
         r.stations = r.stations.filter(station => station.abbr === compareId)
     }
 
@@ -105,7 +105,7 @@ module.exports = [
     { 
         method: 'GET', 
         path: '/stations', 
-        handler: getStations, 
+        handler: async (request, h) => getStations(),
         options: { 
             tags: [ 
                 'api', 
@@ -118,7 +118,7 @@ module.exports = [
     { 
         method: 'GET', 
         path: '/stations/{stationId}', 
-        handler: getStations, 
+        handler: async (request, h) => getStations(request.params.stationId), 
         options: { 
             tags: [ 
                 'api', 

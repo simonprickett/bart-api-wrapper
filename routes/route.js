@@ -22,7 +22,11 @@ const getRoute = async (request, h) => {
         // TODO naming changes and deletes
         delete trip.fares
 
-        r.route.push(response.schedule.request.trip[0])
+        trip.leg.map((leg) => {
+            leg.destinationName = `TODO... lookup ${leg.destination}`
+        });
+
+        r.route.push(trip)
     }
 
     return r
