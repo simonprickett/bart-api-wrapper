@@ -15,11 +15,7 @@ const getFares = async (request, h) => {
 
     if (response && response.fares && response.fares.fare) {
         for (const fare of response.fares.fare) {
-            r.fares.push({
-                amount: fare['amount'],
-                class: fare['class'],
-                name: fare['name']
-            })
+            r.fares.push(fare)
         }
     }
 
