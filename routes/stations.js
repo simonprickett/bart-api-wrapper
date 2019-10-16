@@ -47,7 +47,7 @@ const getStationAccess = async stationId =>  {
         // TODO better error checking...
 
         if (response && response.stations && response.stations.station) {
-            // This could maybe be pushed into the bart/index.js file...
+            // This could maybe be pushed into the bart/index.js file... and done in a loop.
             response.stations.station.parking_flag = response.stations.station['parking_flag'] === '1' ? true : false
             delete response.stations.station.parking_flag
             response.stations.station.bikeflag = response.stations.station.bike_flag === '1' ? true : false
@@ -58,11 +58,20 @@ const getStationAccess = async stationId =>  {
             delete response.stations.station.locker_flag
             response.stations.station.filltime = response.stations.station.fill_time
             delete response.stations.station.fill_time
+            response.stations.station.carshare = response.stations.station.car_share
+            delete response.stations.station.car_share
+            response.stations.station.bikestationtext = response.stations.station.bike_station_text
+            delete response.stations.station.bike_station_text
+            response.stations.station.transitinfo = response.stations.station.transit_info
+            delete response.stations.station.transit_info
 
             r.stationAccess.push(response.stations.station)
         }
         return r
     } else {
+        // This should probably come from cached station access details?
+        // Or at least need some in memory / cache set of station IDs 
+        // to build it from...
         return 'TODO: All stations access details...'
     }
 }
