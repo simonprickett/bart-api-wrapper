@@ -87,7 +87,6 @@ const getStationInfo = async stationId => {
 
         const response = await bart.callBARTAPI(obj)
 
-        // TODO tidy up returned format...
         const r = {
             stationInfo: []
         }
@@ -126,6 +125,9 @@ const getStationInfo = async stationId => {
 
         return r
     } else {
+        // This should probably come from cached station access details?
+        // Or at least need some in memory / cache set of station IDs 
+        // to build it from...
         return 'TODO: All stations info details...'
     }
 }

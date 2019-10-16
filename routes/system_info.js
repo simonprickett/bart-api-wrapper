@@ -18,17 +18,24 @@ const getTrainCount = async (request, h) => {
 }
 
 const getElevatorStatus = async (request, h) => {
+    // This and serviceAnnouncements can be refactored as both 
+    // pretty much do the same thing...
     const response = await bart.callBARTAPI({
         section: 'bsa',
         cmd: 'elev'
     })
 
     const r = {
-        elevatorStatus: []
+        elevatorStatuses: []
     }
 
     if (response && response.bsa) {
-        r.elevatorStatus = response.bsa
+        r.elevatorStatuses = response.bsa
+
+        for (const elevatorStatus of r.elevatorStatuses) {
+            elevatorStatus.smstext = elevatorStatus.sms_text
+            delete elevatorStatus.sms_text
+        }
     }
 
     return r
@@ -40,7 +47,20 @@ const getServiceAnnouncements = async (request, h) => {
         cmd: 'bsa'
     })
 
-    return response
+    const r = {
+        serviceAnnouncements: []
+    }
+
+    if (response && response.bsa) {
+        r.serviceAnnouncements = response.bsa
+
+        for (const serviceAnnouncement of r.serviceAnnouncements) {
+            serviceAnnouncement.smstext = serviceAnnouncement.sms_text
+            delete serviceAnnouncement.sms_text
+        }
+    }
+
+    return r
 }
 
 module.exports = [

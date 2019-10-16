@@ -20,11 +20,20 @@ const getRoute = async (request, h) => {
         const trip = response.schedule.request.trip[0]
 
         // TODO naming changes and deletes
+        // TODO formatting
         delete trip.fares
 
         trip.leg.map((leg) => {
+            leg.order = parseInt(leg.order, 10)
             leg.destinationName = `TODO... lookup ${leg.destination}`
+            leg.bikeflag = leg.bikeflag === '1'
         });
+
+        trip.tripTime = parseInt(trip.tripTime, 10)
+        // TODO look up if load is integer or float or...
+
+        trip.originName = `TODO look up ${request.params.fromStationId}`
+        trip.destinationName = `TODO look up ${request.params.toStationId}`
 
         r.route.push(trip)
     }
