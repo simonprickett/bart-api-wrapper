@@ -86,9 +86,27 @@ const getStationInfo = async stationId => {
             station.longitude = parseFloat(station.gtfs_longitude, 10)
             delete station.gtfs_latitude
             delete station.gtfs_longitude
+            
+            station.platforminfo = station.platform_info
+            delete station.platform_info
+            station.crossstreet = station.cross_street
+            delete station.cross_street
 
-            // TODO parseInt on north_platforms.platform array
-            // TODO parseInt on south_platforms.platform array
+            station.northroutes = station.north_routes
+            delete station.north_routes
+            station.southroutes = station.south_routes
+            delete station.south_routes
+
+            station.northplatforms = station.north_platforms
+            delete station.north_platforms
+            station.southplatforms = station.south_platforms
+            delete station.south_platforms
+
+            station.northroutes = [ ...station.northroutes.route ]
+            station.southroutes = [ ...station.southroutes.route ]
+
+            station.northplatforms = [ ...station.northplatforms.platform ]
+            station.southplatforms = [ ...station.southplatforms.platform ]
         }
 
         return r
