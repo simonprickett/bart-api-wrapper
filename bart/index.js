@@ -34,7 +34,7 @@ const reformatResponse = obj => {
     return obj
 }
 
-const getBARTUrl = params => `${BART_API_BASE}/${params.section}.aspx?cmd=${params.cmd}${params.orig ? '&orig=' + params.orig : ''}${params.dest ? '&dest=' + params.dest : ''}&key=${BART_API_KEY}&json=y`
+const getBARTUrl = params => `${BART_API_BASE}/${params.section}.aspx?cmd=${params.cmd}${params.orig ? '&orig=' + params.orig : ''}${params.dest ? '&dest=' + params.dest : ''}${params.plat ? '&plat=' + params.plat : ''}${params.dir ? '&dir=' + params.dir : ''}&key=${BART_API_KEY}&json=y`
 
 const callBARTAPI = async params => {
     if (BART_API_KEY === DEFAULT_BART_KEY) {
