@@ -2,11 +2,7 @@ const Joi = require('@hapi/joi')
 const bart = require('../bart')
 
 const getDepartures = async (request, h) => {
-    let stationId = 'all'
-
-    if (request.params.stationId) {
-         stationId = request.params.stationId
-    }
+    const stationId = (request.params.stationId ? request.params.stationId : 'all')
 
     const obj = {
         section: 'etd',
@@ -46,7 +42,7 @@ const getDepartures = async (request, h) => {
                 }
             }
 
-            r.departures = stn
+            r.departures.push(stn)
         }   
     }
 
